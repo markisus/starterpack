@@ -1,0 +1,3 @@
+This code copied and slightly modified from the Tensorflow project and is used by //third_party/gpu (cuda crosstool)
+
+- changed bash flags from -c to -lc whenever bash is called as a subprocess

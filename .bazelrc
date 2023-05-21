@@ -1,0 +1,15 @@
+# Cuda related options copied from tensorflow project
+
+# This config refers to building with CUDA available. It does not necessarily
+# mean that we build CUDA op kernels.
+build:using_cuda --@local_config_cuda//:enable_cuda
+build:using_cuda --crosstool_top=@local_config_cuda//crosstool:toolchain
+
+# This config refers to building CUDA op kernels with nvcc.
+build:cuda --config=using_cuda
+
+# automatically add --config=cuda to all build commands
+# build --config=cuda
+
+# not sure what this is
+# tensorflow cuda crosstool needs it
