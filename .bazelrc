@@ -10,6 +10,3 @@ build:cuda --config=using_cuda
 
 # automatically add --config=cuda to all build commands
 # build --config=cuda
-
-# not sure what this is
-# tensorflow cuda crosstool needs it
