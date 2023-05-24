@@ -25,9 +25,13 @@ def which(repository_ctx, program_name):
         if not program_name.endswith(".exe"):
             program_name = program_name + ".exe"
         result = execute(repository_ctx, ["C:\\Windows\\System32\\where.exe", program_name])
+
+        # on windows, this may return multiple matches separated by newlines
+        result = result.stdout.strip().split('\n', 1)[0].strip()
+        return result
     else:
         result = execute(repository_ctx, ["which", program_name])
-    return result.stdout.rstrip()
+        return result.stdout.rstrip()
 
 def get_python_bin(repository_ctx):
     """Gets the python bin path.

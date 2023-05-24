@@ -660,7 +660,7 @@ def _exec_find_cuda_config(repository_ctx, script_path, cuda_libraries):
         "f = open('script.py', 'wb');" +
         "f.write(script);" +
         "f.close();" +
-        "system('\"%s\" script.py %s');" % (python_bin, " ".join(cuda_libraries))
+        "system(r'\"%s\" script.py %s');" % (python_bin, " ".join(cuda_libraries))
     )
 
     return execute(repository_ctx, [python_bin, "-c", decompress_and_execute_cmd])
@@ -1366,57 +1366,57 @@ def _create_local_cuda_repository(repository_ctx):
 def _py_tmpl_dict(d):
     return {"%{cuda_config}": str(d)}
 
-def _create_remote_cuda_repository(repository_ctx, remote_config_repo):
-    """Creates pointers to a remotely configured repo set up to build with CUDA."""
-    _tpl(
-        repository_ctx,
-        "cuda:build_defs.bzl",
-        {
-            "%{cuda_is_configured}": "True",
-            "%{cuda_extra_copts}": _compute_cuda_extra_copts(
-                repository_ctx,
-                compute_capabilities(repository_ctx),
-            ),
-        },
-    )
-    repository_ctx.template(
-        "cuda/BUILD",
-        config_repo_label(remote_config_repo, "cuda:BUILD"),
-        {},
-    )
-    repository_ctx.template(
-        "cuda/build_defs.bzl",
-        config_repo_label(remote_config_repo, "cuda:build_defs.bzl"),
-        {},
-    )
-    repository_ctx.template(
-        "cuda/cuda/cuda_config.h",
-        config_repo_label(remote_config_repo, "cuda:cuda/cuda_config.h"),
-        {},
-    )
-    repository_ctx.template(
-        "cuda/cuda/cuda_config.py",
-        config_repo_label(remote_config_repo, "cuda:cuda/cuda_config.py"),
-        _py_tmpl_dict({}),
-    )
+# def _create_remote_cuda_repository(repository_ctx, remote_config_repo):
+#     """Creates pointers to a remotely configured repo set up to build with CUDA."""
+#     _tpl(
+#         repository_ctx,
+#         "cuda:build_defs.bzl",
+#         {
+#             "%{cuda_is_configured}": "True",
+#             "%{cuda_extra_copts}": _compute_cuda_extra_copts(
+#                 repository_ctx,
+#                 compute_capabilities(repository_ctx),
+#             ),
+#         },
+#     )
+#     repository_ctx.template(
+#         "cuda/BUILD",
+#         config_repo_label(remote_config_repo, "cuda:BUILD"),
+#         {},
+#     )
+#     repository_ctx.template(
+#         "cuda/build_defs.bzl",
+#         config_repo_label(remote_config_repo, "cuda:build_defs.bzl"),
+#         {},
+#     )
+#     repository_ctx.template(
+#         "cuda/cuda/cuda_config.h",
+#         config_repo_label(remote_config_repo, "cuda:cuda/cuda_config.h"),
+#         {},
+#     )
+#     repository_ctx.template(
+#         "cuda/cuda/cuda_config.py",
+#         config_repo_label(remote_config_repo, "cuda:cuda/cuda_config.py"),
+#         _py_tmpl_dict({}),
+#     )
 
-    repository_ctx.template(
-        "crosstool/BUILD",
-        config_repo_label(remote_config_repo, "crosstool:BUILD"),
-        {},
-    )
+#     repository_ctx.template(
+#         "crosstool/BUILD",
+#         config_repo_label(remote_config_repo, "crosstool:BUILD"),
+#         {},
+#     )
 
-    repository_ctx.template(
-        "crosstool/cc_toolchain_config.bzl",
-        config_repo_label(remote_config_repo, "crosstool:cc_toolchain_config.bzl"),
-        {},
-    )
+#     repository_ctx.template(
+#         "crosstool/cc_toolchain_config.bzl",
+#         config_repo_label(remote_config_repo, "crosstool:cc_toolchain_config.bzl"),
+#         {},
+#     )
 
-    repository_ctx.template(
-        "crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc",
-        config_repo_label(remote_config_repo, "crosstool:clang/bin/crosstool_wrapper_driver_is_not_gcc"),
-        {},
-    )
+#     repository_ctx.template(
+#         "crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc",
+#         config_repo_label(remote_config_repo, "crosstool:clang/bin/crosstool_wrapper_driver_is_not_gcc"),
+#         {},
+#     )
 
 def _cuda_autoconf_impl(repository_ctx):
     """Implementation of the cuda_autoconf repository rule."""
